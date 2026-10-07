@@ -1,0 +1,151 @@
+-----------------------------------------------------------------------------------------------------------------------------
+NWD | NWW
+-----------------------------------------------------------------------------------------------------------------------------
+
+Liczba d jest dzielnikiem liczby a, jeśli a dzieli się przez d bez reszty. Na przykład 12 jest dzielnikiem liczby 36, bo 36 
+podzielone przez 12 daje 3 i resztę zero.
+
+NWD dwóch liczb to największa liczba, która dzieli obie te liczby bez reszty. NWW dwóch liczb to najmniejsza dodatnia liczba, 
+która dzieli się bez reszty przez każdą z nich. Jeśli NWD dwóch liczb wynosi 1, mówimy, że te liczby są względnie pierwsze. 
+Przykładem są liczby 8 i 15.
+
+Weźmy liczby 84 i 36. Dzielniki liczby 84 to 1, 2, 3, 4, 6, 7, 12, 14, 21, 28, 42 i 84. Dzielniki liczby 36 
+to 1, 2, 3, 4, 6, 9, 12, 18 i 36. Wspólne dzielniki to 1, 2, 3, 4, 6 i 12. Największy z nich to 12. Zatem NWD z 84 i 36 
+wynosi 12.
+
+Teraz wielokrotności. Wielokrotności liczby 84 to 84, 168, 252 i tak dalej. Wielokrotności liczby 36 to 36, 72, 108, 144, 
+180, 216 i 252. Pierwsza wspólna wartość to 252. Zatem NWW z 84 i 36 wynosi 252.
+
+
+Dzielniki 84:        1, 2, 3, 4, 6, 7, 12, 14, 21, 28, 42, 84
+Dzielniki 36:        1, 2, 3, 4, 6, 9, 12, 18, 36
+Wspólne dzielniki:   1, 2, 3, 4, 6, 12        ->  NWD(84, 36) = 12
+
+Wielokrotności 84:   84, 168, 252, ...
+Wielokrotności 36:   36, 72, 108, 144, 180, 216, 252, ... ->  NWW(84, 36) = 252
+
+W szkole NWD liczy się zwykle przez rozkład na czynniki pierwsze. 84 to dwa do kwadratu razy trzy razy siedem. 36 to dwa 
+do kwadratu razy trzy do kwadratu. Do NWD bierzesz czynniki wspólne z mniejszym wykładnikiem. To dwa do kwadratu razy 
+trzy, czyli 12. Do NWW bierzesz wszystkie czynniki z większym wykładnikiem. To dwa do kwadratu razy trzy do kwadratu razy 
+siedem, czyli 252.
+
+84 = 2² · 3 · 7
+36 = 2² · 3²
+
+NWD = 2² · 3        = 12     (czynniki wspólne, mniejszy wykładnik)
+NWW = 2² · 3² · 7   = 252    (wszystkie czynniki, większy wykładnik)
+
+
+Ta metoda dobrze pokazuje, czym jest NWD i NWW. W programie jest jednak wolna, bo rozkład dużej liczby na czynniki wymaga 
+wielu dzieleń. Dlatego w kodzie stosujemy algorytm Euklidesa.
+
+Algorytm Euklidesa opiera się na kilku własnościach.
+
+1.  NWD(a, 0) = a
+NWD z a i zera jest równe a.
+
+2.  NWD(a, b) = NWD(a - b, b)          dla a > b
+Jeśli a jest większe od b, to NWD z a i b jest równe NWD z różnicy a minus b oraz liczby b.
+
+3.  NWD(a, b) = NWD(b, a mod b)        dla b > 0
+NWD z a i b jest równe NWD z liczby b oraz reszty z dzielenia a przez b.
+
+4.  NWD(a, b) · NWW(a, b) = a · b
+Iloczyn NWD i NWW jest równy iloczynowi samych liczb. Sprawdźmy to. 12 razy 252 to 3024. 84 razy 36 to też 3024.
+
+5.  NWD(a, b, c) = NWD(NWD(a, b), c), tak samo dla NWW
+NWD trzech liczb liczymy po kolei. Najpierw liczymy NWD dwóch pierwszych liczb. Potem liczymy NWD tego wyniku 
+i trzeciej liczby. NWW liczymy tak samo.
+
+---
+Dodatkowe wyjaśnienia:
+
+
+->  Dlaczego druga własność jest prawdziwa? Sprawdźmy to na liczbach 84 i 36. Ich różnica to 48. Wypiszmy dzielniki 
+wszystkich trzech liczb. Wspólne dzielniki 84 i 36 to 1, 2, 3, 4, 6 i 12. Wspólne dzielniki 48 i 36 to dokładnie 
+te same liczby. Skoro zbiory wspólnych dzielników są takie same, to ich największy element też jest ten sam. 
+W obu przypadkach NWD wynosi 12.
+
+Skąd bierze się ta zgodność? Weźmy jeden ze wspólnych dzielników, na przykład 6. Liczba 84 to 14 szóstek. 
+Liczba 36 to 6 szóstek. Gdy od 84 odejmiesz 36, zostaje 14 minus 6, czyli 8 szóstek. To jest właśnie 48. Różnica 
+dwóch wielokrotności szóstki jest więc znowu wielokrotnością szóstki. Działa to też w drugą stronę. 48 to 8 szóstek, 
+a 36 to 6 szóstek. Ich suma to 14 szóstek, czyli 84.
+
+Ogólnie wygląda to tak. Jeśli liczba d dzieli a oraz b, to dzieli też ich różnicę. Jeśli d dzieli b oraz różnicę 
+a minus b, to dzieli też ich sumę, czyli a. Przy przejściu od pary a i b do pary a minus b i b żaden wspólny dzielnik 
+nie znika i żaden nowy się nie pojawia. Obie pary mają więc te same wspólne dzielniki, a zatem ten sam NWD.
+
+
+->  Teraz trzecia własność. Reszta z dzielenia to wynik wielokrotnego odejmowania. Od 84 odejmujemy 36 i zostaje 48. 
+Od 48 znowu odejmujemy 36 i zostaje 12. Liczba 12 jest mniejsza od 36, więc kończymy. Odjęliśmy 36 dwa razy i zostało 12. 
+Dokładnie to samo daje dzielenie z resztą. 84 podzielone przez 36 to 2 i reszta 12.
+
+Każde z tych odejmowań zachowuje NWD, bo tak mówi druga własność. NWD z 84 i 36 jest równe NWD z 48 i 36. To z kolei 
+jest równe NWD z 12 i 36. Kolejność liczb w NWD nie ma znaczenia, więc możemy to zapisać jako NWD z 36 i 12. Tak właśnie 
+wygląda trzecia własność. NWD z a i b jest równe NWD z b oraz reszty z dzielenia a przez b.
+
+
+---
+Algorytm Euklidesa z odejmowaniem
+
+Najpierw starsza wersja algorytmu, czyli wersja z odejmowaniem. Na wejściu mamy dwie liczby naturalne a i b, obie większe 
+od zera. Na wyjściu chcemy otrzymać ich NWD.
+
+dopóki a ≠ b wykonuj
+    jeżeli a > b
+        a ← a - b
+    w przeciwnym razie
+        b ← b - a
+zwróć a
+
+
+krok    a     b     operacja
+ 0      84    36    a > b, więc a ← 84 - 36
+ 1      48    36    a > b, więc a ← 48 - 36
+ 2      12    36    a < b, więc b ← 36 - 12
+ 3      12    24    a < b, więc b ← 24 - 12
+ 4      12    12    a = b, koniec          ->  NWD = 12
+
+ Ta wersja ma dwie wady. Pierwsza wada: jeśli jedna z liczb jest równa zero, pętla nigdy się nie kończy, 
+ bo odejmowanie zera niczego nie zmienia. Druga wada: dla liczb o bardzo różnej wielkości algorytm działa 
+ długo. NWD z miliona i jedynki wymaga 999 999 odejmowań.
+
+
+---
+Algorytm Euklidesa z resztą z dzielenia
+
+Dlatego w praktyce i na maturze używamy wersji z resztą z dzielenia. W tej wersji wystarczy, że co najmniej 
+jedna z liczb jest różna od zera.
+
+dopóki b ≠ 0 wykonuj
+    r ← a mod b
+    a ← b
+    b ← r
+zwróć a
+
+krok    a     b     r = a mod b
+ 0      84    36    12
+ 1      36    12    0
+ 2      12    0     b = 0, koniec          ->  NWD = 12
+
+Ten sam algorytm można zapisać rekurencyjnie. NWD z a i zera to a. W każdym innym przypadku NWD z a i b to 
+NWD z liczby b oraz reszty z dzielenia a przez b.
+NWD(a, b) = a                  gdy b = 0
+NWD(a, b) = NWD(b, a mod b)    gdy b > 0
+
+
+---
+Złożoność
+
+Wersja z odejmowaniem wykonuje najwyżej o jedno odejmowanie mniej, niż wynosi większa z liczb. Tyle odejmowań 
+potrzeba na przykład dla miliona i jedynki. Wersja z resztą ma złożoność logarytmiczną względem mniejszej z liczb.
+
+Dokładne ograniczenie podaje twierdzenie Lamégo. Załóżmy, że a jest większe lub równe b, a b jest większe od zera. 
+Wtedy liczba dzieleń nie przekracza pięciokrotności liczby cyfr liczby b. Dla 89 i 55 to najwyżej 10 dzieleń, 
+a algorytm wykonuje ich 9. Jeśli a jest mniejsze od b, pierwsze dzielenie tylko zamienia liczby miejscami. Wtedy 
+dochodzi jedno dzielenie.
+
+Najgorszym przypadkiem są dwie kolejne liczby Fibonacciego. Oznacza to, że przy a większym od b są one najmniejszą 
+parą, która wymaga danej liczby dzieleń. Na przykład 89 i 55 to najmniejsza para, dla której algorytm wykonuje 
+9 dzieleń. Przy a większym lub równym b żadna para z a nie większym od 89 nie wymaga więcej dzieleń. Na maturze 
+najważniejsze jest zapamiętanie, że złożoność jest logarytmiczna.
